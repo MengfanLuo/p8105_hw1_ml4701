@@ -6,13 +6,14 @@ output: github_document
 
 ```{r, echo=FALSE,message=FALSE}
 library(tidyverse)
+library(palmerpenguins)
 ```
 
 ### Problem 1
 
-The following data frame `df` is constructed using tibble(). It is comprised of:
+The following data frame `df` is constructed using `tibble()`. It is comprised of:
 
-* random sample `norm_samp` of size 10 from a standard Normal distribution
+* random sample `norm_samp` of size 10 from a standard Normal distribution. `set.seed(1234)` is used in the random generation.
 * logical vector `vec_logic` indicating whether elements of the sample are greater than 0
 * character vector `vec_char` of length 10
 * factor vector `vec_factor` of length 10, with 3 different factor levels `H`,`M` and `L`
@@ -51,4 +52,24 @@ Factor variables should also have a predefined number of categories, and thus ca
 For character variables, the value can be arbitrary input and can be infinite, and they don't have orders, so it's difficult and meaningless to represent them as numeric values.
 
 
-## Problem 2
+### Problem 2
+
+package `palmerpenguins` has been installed and here I load the dataset `penguins` and view the first 6 lines of it.
+
+```{r}
+data("penguins", package = "palmerpenguins")
+head(penguins)
+```
+
+This dataset has `r nrow(penguins)` rows and `r ncol(penguins)` columns, the `r ncol(penguins)` variables including:  `r colnames(penguins)`. Looking in to the variable `flipper_length_mm`, the mean flipper length (stripping `NA` values) is `r mean(pull(penguins,flipper_length_mm), na.rm=TRUE)` mm.
+
+The following is a scatterplot of flipper_length_mm (y) vs bill_length_mm (x), and the plot is saved in the project directory as `hw1_scatterplot.pdf`.
+
+```{r, warning=FALSE}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + 
+  geom_point()
+ggsave("hw1_scatterplot.pdf",height = 4, width = 6)
+```
+
+
