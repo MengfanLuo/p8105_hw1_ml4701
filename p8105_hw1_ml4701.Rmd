@@ -13,7 +13,7 @@ library(palmerpenguins)
 
 The following data frame `df` is constructed using `tibble()`. It is comprised of:
 
-* random sample `norm_samp` of size 10 from a standard Normal distribution. `set.seed(1234)` is used in the random generation.
+* random sample `norm_samp` of size 10 from a standard Normal distribution. `set.seed(1234)` is used to fix the random generation.
 * logical vector `vec_logic` indicating whether elements of the sample are greater than 0
 * character vector `vec_char` of length 10
 * factor vector `vec_factor` of length 10, with 3 different factor levels `H`,`M` and `L`
@@ -32,7 +32,7 @@ knitr::kable(df)
 ```
 
 
-Taking the mean of each variable in data frame `df`, numeric variable `norm_samp` has the mean of `r mean(pull(df,norm_samp))`, and logical vector `vec_logic` has the mean of `r mean(pull(df,vec_logic))`, while for character vector `vec_char` and factor vector `vec_factor`, taking mean of then will resulted in a warning message and get `NA` for the mean.
+Taking the mean of each variable in data frame `df`, numeric variable `norm_samp` has the mean of `r mean(pull(df,norm_samp))`, and logical vector `vec_logic` has the mean of `r mean(pull(df,vec_logic))`, while for character vector `vec_char` and factor vector `vec_factor`, taking mean of them will result in a warning message and get `NA` for the mean.
 
 ```{r, collapse = TRUE}
 mean(pull(df,norm_samp))
@@ -49,11 +49,11 @@ as.numeric(pull(df,vec_char))
 as.numeric(pull(df,vec_factor))
 ```
 
-This may because logical and factor variables stand for 2 or several categories and have limited numbers of value. logical values have only two values `TRUE` and `FALSE`, which can be easily encoded into `1` and `0`. And it is reasonable and somewhat instinct to take a mean of the encoded values -- reflecting the fraction of `TRUE`(`1`) among all values.
+Only logical and factor variables can be converted to numeric variables. This may because logical and factor variables stand for 2 or several categories and have limited numbers of value. logical values have only two values `TRUE` and `FALSE`, which can be easily encoded into `1` and `0`. And it is reasonable and somewhat instinct to take a mean of the encoded values -- reflecting the fraction of `TRUE`(`1`) among all values.
 
-Factor variables should also have a predefined number of categories, and thus can be converted into the same amount of integers to present. However, factor values may or may not have levels and orders, and it's meaningless to take mean to the encoded values if there's no order.
+Factor variables should also have a predefined number of categories, and thus can be converted into the same amount of integers to present. However, factor values may or may not have levels and orders, and it's meaningless to take mean to the encoded values if there's no order, and thus we cannot take mean for factor variables.
 
-For character variables, the value can be arbitrary input and can be infinite, and they don't have orders, so it's difficult and meaningless to represent them as numeric values.
+For character variables, the value can be arbitrary input and can be infinite, and they don't have orders, so it's difficult and meaningless to represent them as numeric values, nor to calculate the mean.
 
 
 ### Problem 2
@@ -63,11 +63,36 @@ package `palmerpenguins` has been installed and here I load the dataset `penguin
 ```{r}
 data("penguins", package = "palmerpenguins")
 knitr::kable(head(penguins,10))
+colnames_peng = colnames(penguins) # create a new instance to store column names in dataset panguins
 ```
 
-This dataset has `r nrow(penguins)` rows and `r ncol(penguins)` columns, the `r ncol(penguins)` variables including:  `r colnames(penguins)`. Looking in to the variable `flipper_length_mm`, the mean flipper length (stripping `NA` values) is `r mean(pull(penguins,flipper_length_mm), na.rm=TRUE)` mm.
 
-The following is a scatterplot of flipper_length_mm (y) vs bill_length_mm (x), and the plot is saved in the project directory as `hw1_scatterplot.pdf`.
+```{r,eval = FALSE}
+skimr::skim(penguins)
+```
+
+Further looking into the dataset using `skim`, it has ``r nrow(penguins)`` rows and ``r ncol(penguins)`` columns. There are ``r sum(is.na(penguins))`` numbers missing. The `r ncol(penguins)` variables including:  
+
+* ``r colnames_peng[1]``: factor variable with 3 distinct values. It has ``r sum(is.na(penguins[1]))`` missing values.
+
+* ``r colnames_peng[2]``: factor variable with 3 distinct values. It has ``r sum(is.na(penguins[2]))`` missing values.
+
+* ``r colnames_peng[3]``: numeric variable with mean ``r mean(pull(penguins,colnames_peng[3]), na.rm=TRUE)`` and range `[`r range(pull(penguins,colnames_peng[3]), na.rm = TRUE)`]`. It has ``r sum(is.na(penguins[3]))`` missing values.
+
+* ``r colnames_peng[4]``: numeric variable with mean ``r mean(pull(penguins,colnames_peng[4]), na.rm=TRUE)`` and range `[`r range(pull(penguins,colnames_peng[4]), na.rm = TRUE)`]`. It has ``r sum(is.na(penguins[4]))`` missing values.
+
+* ``r colnames_peng[5]``: numeric variable with mean ``r mean(pull(penguins,colnames_peng[5]), na.rm=TRUE)`` and range `[`r range(pull(penguins,colnames_peng[5]), na.rm = TRUE)`]`. It has ``r sum(is.na(penguins[5]))`` missing values.
+
+* ``r colnames_peng[6]``: numeric variable with mean ``r mean(pull(penguins,colnames_peng[6]), na.rm=TRUE)`` and range `[`r range(pull(penguins,colnames_peng[6]), na.rm = TRUE)`]`. It has ``r sum(is.na(penguins[6]))`` missing values.
+
+* ``r colnames_peng[7]``: factor variable with 2 distinct values. It has ``r sum(is.na(penguins[7]))`` missing values.
+
+* ``r colnames_peng[8]``: numeric variable of integers `2007`,`2008` and `2009`. It has ``r sum(is.na(penguins[8]))`` missing values.
+
+
+Looking in to the variable `flipper_length_mm`, the mean flipper length (stripping `NA` values) is ``r mean(pull(penguins,flipper_length_mm), na.rm=TRUE)`` mm.
+
+The following is a scatterplot of `flipper_length_mm` (y) vs `bill_length_mm` (x), and the plot is saved in the project directory as `hw1_scatterplot.pdf`.
 
 ```{r, warning=FALSE}
 penguins %>% 
