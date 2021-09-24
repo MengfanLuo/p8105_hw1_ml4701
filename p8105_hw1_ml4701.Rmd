@@ -95,9 +95,8 @@ Looking in to the variable `flipper_length_mm`, the mean flipper length (strippi
 The following is a scatterplot of `flipper_length_mm` (y) vs `bill_length_mm` (x), and the plot is saved in the project directory as `hw1_scatterplot.pdf`.
 
 ```{r, warning=FALSE}
-penguins %>% 
-  ggplot(aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + 
-  geom_point()
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+
 ggsave("hw1_scatterplot.pdf",height = 4, width = 6)
 ```
 
