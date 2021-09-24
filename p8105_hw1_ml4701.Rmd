@@ -26,7 +26,11 @@ df = tibble(
   vec_char = c("a","b","c","d","e","f","g","h","i","j"),
   vec_factor = factor(c("H","M","L","L","H","M","L","M","M","H"))
 )
+
+#Visualize as a table
+knitr::kable(df)
 ```
+
 
 Taking the mean of each variable in data frame `df`, numeric variable `norm_samp` has the mean of `r mean(pull(df,norm_samp))`, and logical vector `vec_logic` has the mean of `r mean(pull(df,vec_logic))`, while for character vector `vec_char` and factor vector `vec_factor`, taking mean of then will resulted in a warning message and get `NA` for the mean.
 
@@ -54,11 +58,11 @@ For character variables, the value can be arbitrary input and can be infinite, a
 
 ### Problem 2
 
-package `palmerpenguins` has been installed and here I load the dataset `penguins` and view the first 6 lines of it.
+package `palmerpenguins` has been installed and here I load the dataset `penguins` and view the first 10 lines of it.
 
 ```{r}
 data("penguins", package = "palmerpenguins")
-head(penguins)
+knitr::kable(head(penguins,10))
 ```
 
 This dataset has `r nrow(penguins)` rows and `r ncol(penguins)` columns, the `r ncol(penguins)` variables including:  `r colnames(penguins)`. Looking in to the variable `flipper_length_mm`, the mean flipper length (stripping `NA` values) is `r mean(pull(penguins,flipper_length_mm), na.rm=TRUE)` mm.
